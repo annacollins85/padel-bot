@@ -42,8 +42,13 @@ class EventsController {
     return eventsSerializer.formatNewEvent(nextEvent.dataValues);
   }
 
-  async deleteEvent (id) {
-    return (await Event.deleteEvent(id) !== 0) ? `Event ${id} deleted` : 'Event not found';
+  async updateAttendees (name) {
+    const event = await Event.updateAttendees();
+    return;
+  }
+
+  async deleteEvent (name) {
+    return (await Event.deleteEvent(name) !== 0) ? `Event ${name} deleted` : 'Event not found';
   }
 
 }

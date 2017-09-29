@@ -48,7 +48,7 @@ controller.setupWebserver(process.env.PORT, function (err, webserver) {
 /** ANSWERS SLASH COMMANDS **/
 controller.on('slash_command', async function (slashCommand, message) {
   switch (message.command) {
-    case '/event': //handle the `/echo` slash command. We might have others assigned to this app too!
+    case '/' + process.env.BOT_NAME: //handle the `/echo` slash command. We might have others assigned to this app too!
       // but first, let's make sure the token matches!
       if (message.token !== process.env.VERIFICATION_TOKEN) return; //just ignore it.
 
@@ -77,21 +77,42 @@ controller.on('slash_command', async function (slashCommand, message) {
 /** ANSWERS BUTTON CLICKS **/
 controller.on('interactive_message_callback', function (bot, trigger) {
 
+  const msg = trigger.original_message.attachments;
+
   switch (trigger.actions[0].name) {
     case 'register':
       // This will need to be refactored and go into the controller and serializer
-      if (trigger.original_message.attachments.length < 2) {
+      if (msg.length < 2) {
         // We need to store the participants in a column in the events table as a JSON object
-        trigger.original_message.attachments.push({
+        msg.push({
           'title': 'People attending (1)',
-          'text': '<@' + trigger.user + '>'
+          'text': ' <@' + trigger.user + '>'
         });
-      } else if (trigger.original_message.attachments[1].text.indexOf(trigger.user) === -1) {
-        trigger.original_message.attachments[1].title = 'Interested people (' + Number(trigger.original_message.attachments[1].text.match(/@/g).length+1) + ')';
-        trigger.original_message.attachments[1].text = trigger.original_message.attachments[1].text + ' <@' + trigger.user + '>';
+      } else if (msg[1].text.indexOf(trigger.user) === -1) {
+        msg[1].title = 'People attending (' + Number(msg[1].text.match(/@/g).length+1) + ')';
+        msg[1].text = msg[1].text + ' <@' + trigger.user + '>';
       }
-
       bot.replyInteractive(trigger, trigger.original_message);
+      EventsController.updateAttendees(info, msg[1].text);// NEED TO PASS EVENT NAME
       break;
+
+    case 'unregister':
+      if (msg.length < 2) {
+        return; //ignore
+      }
+      else if (msg[1].text.indexOf(trigger.user) !== -1) {
+        if (msg[1].text.match(/@/g).length === 1) {
+          msg.pop();
+        }
+        else {
+          const name = ' <@' + trigger.user + '>';
+          msg[1].title = 'People attending (' + Number(msg[1].text.match(/@/g).length-1) + ')';
+          msg[1].text = msg[1].text.replace(name, '');
+        }
+      }
+      bot.replyInteractive(trigger, trigger.original_message);
+      EventsController.updateAttendees(info, msg[1].text);// NEED TO PASS EVENT NAME
+      break;
+
   }
 });

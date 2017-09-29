@@ -8,6 +8,9 @@ const Event = sequelize.define('event', {
   },
   date: {
     type: Sequelize.DATE
+  },
+  attendees: {
+    type: Sequelize.STRING
   }
 });
 // Event.sync({force: true});
@@ -38,10 +41,19 @@ module.exports.createEvent = async (info) => {
   }
 };
 
-module.exports.deleteEvent = async (id) => {
+module.exports.deleteEvent = async (info) => {
   try {
-    return await Event.destroy({ where: { id: id } });
+    console.log('info', info);
+    return await Event.destroy({ where: { info: info } });
   } catch (error) {
     Console.error(error);
+  }
+};
+
+module.exports.updateAttendees = async (info, attendees) => {
+  try {
+    return await Event.update({ attendees: attendees }, { where: { info: info,  } });
+  } catch (error) {
+    Console.error(error)
   }
 };
