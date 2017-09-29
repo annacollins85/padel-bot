@@ -2,6 +2,8 @@ const Botkit = require('botkit');
 const Strings = require('./utils/strings');
 const Console = console;
 
+require('dotenv').config();
+
 const EventsController = require('./controllers/events.controller');
 
 if (
@@ -23,7 +25,8 @@ let config = {
 const controller = Botkit.slackbot(config).configureSlackApp({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  scopes: ['commands', 'channels:read']
+  scopes: ['commands', 'channels:read'],
+  redirectUri: 'https://cwbcn.localtunnel.me/oauth'
 });
 
 controller.setupWebserver(process.env.PORT, function (err, webserver) {
