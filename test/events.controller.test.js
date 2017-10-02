@@ -1,48 +1,22 @@
 'use strict';
 
 require('chai').should();
-// const sinon = require('sinon');
+const sinon = require('sinon');
 const mocks = require('./mocks');
 const EventController = require('../controllers/events.controller');
-const EventModel = require('../models/event');
 
-//mocks
-const mockCreated = {
-  'response_type': 'in_channel',
-  'text': 'A new event has just been created! Will you attend?',
-  'attachments': [{
-    'text': 'pita',
-    'attachment_type': 'default',
-    'actions': [
-      {
-        'name': 'register',
-        'text': 'Count me in!',
-        'type': 'button',
-        'value': 42
-      },
-      {
-        'name': 'unregister',
-        'text': 'Sorry! I can\'t make it anymore.',
-        'type': 'button',
-        'value': 42
-      }
-    ],
-    'callback_id': 'participate',
-  }]
-};
-
-describe('Events', function () {
+describe('EventsController', function () {
   let eventsController = '';
 
   beforeEach(() => {
     eventsController = new EventController();
   });
 
-  // it ('should insert an event', async () => {
-  //   sinon.stub(eventsController, 'createEvent').return(new Promise((resolve) => resolve(mockCreated)));
-  //   const createEvent = await eventsController.processMessage('create pita');
-  //   createdEvent.should.equal(mockCreated);
-  // });
+  it ('should insert an event', async () => {
+    sinon.stub(eventsController, 'createEvent').returns(new Promise((resolve) => resolve(mocks.mockCreated)));
+    const createdEvent = await eventsController.processMessage('create pita');
+    createdEvent.should.equal(mocks.mockCreated);
+  });
 
   /* commenting out tests: the best way to get green!
       Before reactivating these tests, we need to mock the db data

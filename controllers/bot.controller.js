@@ -29,7 +29,5 @@ class BotController {
     }
   }
 }
-//
-// const botController = new BotController();
-//
-// controller.on('slash_command', botController.answerSlashCommands);
+
+module.exports = BotController;

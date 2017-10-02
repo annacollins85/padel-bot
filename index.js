@@ -1,6 +1,7 @@
 const Botkit = require('botkit');
 const Strings = require('./utils/strings');
 const Console = console;
+const BotController = require('./controllers/bot.controller');
 
 require('dotenv').config();
 
@@ -46,32 +47,10 @@ controller.setupWebserver(process.env.PORT, function (err, webserver) {
 });
 
 /** ANSWERS SLASH COMMANDS **/
-controller.on('slash_command', async function (slashCommand, message) {
-  switch (message.command) {
-    case '/' + process.env.BOT_NAME: //handle the `/echo` slash command. We might have others assigned to this app too!
-      // but first, let's make sure the token matches!
-      if (message.token !== process.env.VERIFICATION_TOKEN) return; //just ignore it.
 
-      // if no text was supplied, treat it as a help command
-      if (message.text === '' || message.text === 'help') {
-        slashCommand.replyPrivate(message, Strings.HELP);
-        return;
-      }
+const botController = new BotController();
 
-      const events = new EventsController();
-      const result = await events.processMessage(message.text);
-
-      slashCommand.replyPublic(message, result); // display a creation message
-
-      return;
-
-    default:
-      slashCommand.replyPublic(
-        message,
-        message.command + ' has not been implemented yet.'
-      );
-  }
-});
+controller.on('slash_command', botController.answerSlashCommands);
 
 
 /** ANSWERS BUTTON CLICKS **/
