@@ -31,7 +31,8 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-json": "^1.2.0",
     "ghooks": "^2.0.0",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "sinon": "^4.0.0"
   },
   "engines": {
     "node": ">=8.0.0"

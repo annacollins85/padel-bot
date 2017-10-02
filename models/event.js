@@ -13,7 +13,7 @@ const Event = sequelize.define('event', {
     type: Sequelize.STRING
   }
 });
-// Event.sync({force: true});
+Event.sync({force: true});
 
 /* The list feature is not used for the moment */
 // module.exports.getEvents = async () => {
