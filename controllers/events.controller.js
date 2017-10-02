@@ -4,8 +4,13 @@ const Strings = require('../utils/strings');
 
 class EventsController {
 
+  constructor () {
+    this.Event = Event;
+    this.eventsSerializer = eventsSerializer;
+  }
+
   async processMessage (eventInfo) {
-    const event = eventsSerializer.parseEvent(eventInfo);
+    const event = this.eventsSerializer.parseEvent(eventInfo);
     switch (event.action) {
       case 'create':
         return await this.createEvent(event.params);
@@ -20,35 +25,37 @@ class EventsController {
     }
   }
 
-  async createEvent (info) {
-    if (info === '' || !info || info === false) {
-      console.log('no info provided');
+  async createEvent (name) {
+    if (
+      typeof name !== 'string'
+      || name === ''
+      || !name
+      || name === false
+    ) {
       return false;
     }
-    console.log('info is', info);
-    const event = await Event.createEvent(info.join(' '));
-    console.log('event is', JSON.stringify(event));
-    return await eventsSerializer.formatNewEvent(event.dataValues);
+    const event = await this.Event.createEvent(name);
+    return await this.eventsSerializer.formatNewEvent(event.dataValues);
   }
 
   /* The list feature is WIP */
   // async listEvents () {
-  //   const eventList = await Event.getEvents();
-  //   return eventsSerializer.formatEventList(eventList);
+  //   const eventList = await this.Event.getEvents();
+  //   return this.eventsSerializer.formatEventList(eventList);
   // }
 
   async getNextEvent () {
-    const nextEvent = await Event.getNextEvent();
-    return eventsSerializer.formatNewEvent(nextEvent.dataValues);
+    const nextEvent = await this.Event.getNextEvent();
+    return this.eventsSerializer.formatNewEvent(nextEvent.dataValues);
   }
 
   async updateAttendees (name) {
-    const event = await Event.updateAttendees();
+    const event = await this.Event.updateAttendees();
     return;
   }
 
   async deleteEvent (name) {
-    return (await Event.deleteEvent(name) !== 0) ? `Event ${name} deleted` : 'Event not found';
+    return (await this.Event.deleteEvent(name) !== 0) ? `Event ${name} deleted` : 'Event not found';
   }
 
 }

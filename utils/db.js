@@ -1,19 +1,23 @@
+/* eslint-disable no-alert, no-console */
 const Sequelize = require('sequelize');
-const Console = console;
+
+const logging = process.env.ENV !== 'test'
+  && process.env.ENV !== 'production';
 
 const sequelize = new Sequelize({
   host: 'localhost',
   dialect: 'sqlite',
-  storage: './db.sqlite'
+  storage: './db.sqlite',
+  logging
 });
 
 sequelize
   .authenticate()
   .then(() => {
-    Console.log('Database connection established successfully.');
+    logging && console.log('Database connection established successfully.');
   })
   .catch(err => {
-    Console.error('Unable to connect to the database:', err);
+    logging && console.error('Unable to connect to the database:', err);
   });
 
 module.exports = sequelize;

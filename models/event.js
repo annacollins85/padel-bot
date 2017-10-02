@@ -24,15 +24,15 @@ const Event = sequelize.define('event', {
 //   }
 // };
 
-module.exports.getNextEvent = async () => {
+Event.getNextEvent = async () => {
   try {
-    return await Event.findOne({ order: [ ['date', 'ASC']]});
+    return await EventModel.Event.findOne({ order: [ ['date', 'ASC']]});
   } catch (error) {
     Console.error(error);
   }
 };
 
-module.exports.createEvent = async (info) => {
+Event.createEvent = async (info) => {
   const date = new Date();
   try {
     return await Event.create({info: info, date});
@@ -41,19 +41,20 @@ module.exports.createEvent = async (info) => {
   }
 };
 
-module.exports.deleteEvent = async (info) => {
+Event.deleteEvent = async (info) => {
   try {
-    console.log('info', info);
     return await Event.destroy({ where: { info: info } });
   } catch (error) {
     Console.error(error);
   }
 };
 
-module.exports.updateAttendees = async (info, attendees) => {
+Event.updateAttendees = async (info, attendees) => {
   try {
     return await Event.update({ attendees: attendees }, { where: { info: info,  } });
   } catch (error) {
     Console.error(error)
   }
 };
+
+module.exports = Event;
