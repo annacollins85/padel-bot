@@ -17,11 +17,8 @@ class BotController {
           slashCommand.replyPrivate(message, Strings.HELP);
           return;
         }
-        // doesn't work because the constructor never instantiates a new EventsController
-        // console.log(this.eventsController)
-        // const result = await this.eventsController.processMessage(message.text);
-        const events = new EventsController();
-        const result = await events.processMessage(message.text);
+
+        const result = await this.eventsController.processMessage(message.text);
 
         slashCommand.replyPublic(message, result); // display a creation message
 

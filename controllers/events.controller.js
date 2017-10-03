@@ -56,7 +56,7 @@ class EventsController {
 
   async deleteEvent (name) {
     return (await this.Event.deleteEvent(name) !== 0) ? `Event ${name} deleted` : 'Event not found';
-  }s
+  }
 
 }
 

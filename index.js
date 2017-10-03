@@ -1,8 +1,8 @@
-const Koa = require('koa');
-const app = new Koa();
-const serve = require('koa-static');
-const bodyParser = require('koa-bodyparser');
-const router = require('./router');
+// const Koa = require('koa');
+// const app = new Koa();
+// const serve = require('koa-static');
+// const bodyParser = require('koa-bodyparser');
+// const router = require('./router');
 
 const Botkit = require('botkit');
 const Strings = require('./utils/strings');
@@ -10,6 +10,16 @@ const Strings = require('./utils/strings');
 const BotController = require('./controllers/bot.controller');
 const EventsController = require('./controllers/events.controller');
 require('dotenv').config();
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods())
+  .listen(3000, () => {
+    console.log('Koa app listening on port 3000');
+  });
+
+
+/** CONNECTION TO SLACK **/
 
 if (
   !process.env.CLIENT_ID ||
