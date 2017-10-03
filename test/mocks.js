@@ -53,3 +53,9 @@ module.exports.mockMessage = {
 module.exports.slashCommand = {
   //
 }
+
+module.exports.dateTime = '04/10/2017 14:00';
+module.exports.mockMessageWithDateTime = 'create bbq ' + module.exports.dateTime;
+module.exports.mockMessageWithDateTime3words = 'create bbq on terrace ' + module.exports.dateTime;
+module.exports.date = '04/10/2017';
+module.exports.mockMessageWithDate = 'create bbq ' + module.exports.date;

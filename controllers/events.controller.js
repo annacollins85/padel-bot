@@ -2,6 +2,8 @@ const eventsSerializer = require('../serializers/events.serializer');
 const Event = require('../models/event');
 const Strings = require('../utils/strings');
 
+const moment = require('moment');
+
 class EventsController {
 
   constructor () {
@@ -35,7 +37,18 @@ class EventsController {
     ) {
       return false;
     }
-    const event = await this.Event.createEvent(name);
+
+    const matches = name.match(/(\d\d\/\d\d\/\d\d\d\d)[\s]?(\d\d:\d\d)?/);
+    let date;
+    let allDay = true;
+    if (matches && matches.length > 0) {
+      date = matches[0];
+      name = name.substring(0, matches.index).trim();
+      allDay = matches[2] === undefined;
+      date = moment(date, 'DD/MM/YYYY HH:mm').toDate();
+    }
+
+    const event = await this.Event.createEvent(name, date, allDay);
     return await this.eventsSerializer.formatNewEvent(event.dataValues);
   }
 

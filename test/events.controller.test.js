@@ -1,5 +1,7 @@
 'use strict';
 
+const moment = require('moment');
+
 require('chai').should();
 const sinon = require('sinon');
 const mocks = require('./mocks');
@@ -34,6 +36,40 @@ describe('EventsController', function () {
     sinon.stub(eventsController, 'createEvent').returns(new Promise((resolve) => resolve(mocks.mockCreated)));
     const createdEvent = await eventsController.processMessage('create pita');
     createdEvent.should.equal(mocks.mockCreated);
+  });
+
+  it ('should create event without date');
+
+  it ('should create event with datetime', async () => {
+    const message = mocks.mockMessageWithDateTime;
+
+    const response = await eventsController.processMessage(message);
+    const event = eventsController.eventsSerializer.formatNewEvent.args[0][0];
+
+    const date = moment(mocks.dateTime, 'DD/MM/YYYY HH:mm');
+
+    event.date.should.eql(new Date(date));
+  });
+
+  it ('should create event with date', async () => {
+    const message = mocks.mockMessageWithDate;
+
+    const response = await eventsController.processMessage(message);
+    const event = eventsController.eventsSerializer.formatNewEvent.args[0][0];
+
+    const date = moment(mocks.date, 'DD/MM/YYYY HH:mm');
+
+    event.date.should.eql(new Date(date));
+    event.allDay.should.be.true;
+  });
+
+  it ('should create event wiht datetime and more than one word', async () => {
+    const message = mocks.mockMessageWithDateTime3words;
+
+    const response = await eventsController.processMessage(message);
+    const event = eventsController.eventsSerializer.formatNewEvent.args[0][0];
+
+    event.info.should.eql('bbq on terrace');
   });
 
   /* commenting out tests: the best way to get green!

@@ -1,8 +1,9 @@
-// const Koa = require('koa');
-// const app = new Koa();
-// const serve = require('koa-static');
-// const bodyParser = require('koa-bodyparser');
-// const router = require('./router');
+const Koa = require('koa');
+const app = new Koa();
+const bodyParser = require('koa-bodyparser');
+const router = require('./router');
+const cors = require('kcors');
+const logger = require('koa-logger');
 
 const Botkit = require('botkit');
 const Strings = require('./utils/strings');
@@ -12,6 +13,8 @@ const EventsController = require('./controllers/events.controller');
 require('dotenv').config();
 
 app
+  .use(cors())
+  .use(logger())
   .use(router.routes())
   .use(router.allowedMethods())
   .listen(3000, () => {
@@ -41,7 +44,7 @@ const controller = Botkit.slackbot(config).configureSlackApp({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   scopes: ['commands', 'channels:read'],
-  redirectUri: 'https://cwbcn2.localtunnel.me/oauth'
+  redirectUri: 'https://cwbcn.localtunnel.me/oauth'
 });
 
 controller.setupWebserver(process.env.PORT, function (err, webserver) {

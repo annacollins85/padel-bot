@@ -1,8 +1,8 @@
 const Router = require('koa-router');
 const router = new Router();
 
-const KoaEventsController = require('./controllers/koa-events.controller');
+const EventsController = require('./controllers/koa/events.controller');
 
-router.get('/', KoaEventsController.getAllEvents);
+router.get('/', EventsController.getAllEvents);
 
 module.exports = router;

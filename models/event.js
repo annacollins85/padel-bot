@@ -11,6 +11,10 @@ const Event = sequelize.define('event', {
   },
   attendees: {
     type: Sequelize.STRING
+  },
+  allDay: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
   }
 });
 // Event.sync({force: true});
@@ -32,10 +36,9 @@ Event.getNextEvent = async () => {
   }
 };
 
-Event.createEvent = async (info) => {
-  const date = new Date();
+Event.createEvent = async (info, date, allDay) => {
   try {
-    return await Event.create({info: info, date});
+    return await Event.create({info, date, allDay});
   } catch (error) {
     Console.error(error);
   }
@@ -57,9 +60,9 @@ Event.updateAttendees = async (data) => {
   }
 };
 
-Event.getAllEvents = async () => {
+Event.getAllEvents = () => {
   try {
-    return await Event.findAll({});
+    return Event.findAll({});
   } catch (error) {
     Console.error(error);
   }
