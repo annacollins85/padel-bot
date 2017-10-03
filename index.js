@@ -72,7 +72,7 @@ controller.on('interactive_message_callback', function (bot, trigger) {
         msg[1].text = msg[1].text + ' <@' + trigger.user + '>';
       }
       bot.replyInteractive(trigger, trigger.original_message);
-      EventsController.updateAttendees(info, msg[1].text);// NEED TO PASS EVENT NAME
+      // EventsController.updateAttendees(info, msg[1].text);// NEED TO PASS EVENT NAME
       break;
 
     case 'unregister':
@@ -90,7 +90,7 @@ controller.on('interactive_message_callback', function (bot, trigger) {
         }
       }
       bot.replyInteractive(trigger, trigger.original_message);
-      EventsController.updateAttendees(info, msg[1].text);// NEED TO PASS EVENT NAME
+      // EventsController.updateAttendees(info, msg[1].text);// NEED TO PASS EVENT NAME
       break;
 
   }

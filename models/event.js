@@ -53,7 +53,7 @@ Event.updateAttendees = async (info, attendees) => {
   try {
     return await Event.update({ attendees: attendees }, { where: { info: info,  } });
   } catch (error) {
-    Console.error(error)
+    Console.error(error);
   }
 };
 

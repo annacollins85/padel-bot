@@ -2,6 +2,10 @@ const Botkit = require('botkit');
 const EventsController = require('./events.controller');
 
 class BotController {
+  // constructor () {
+  //   this.EventsController = new EventsController();
+  // }
+
   async answerSlashCommands (slashCommand, message) {
     switch (message.command) {
       case '/' + process.env.BOT_NAME: //handle the `/echo` slash command. We might have others assigned to this app too!
@@ -15,6 +19,7 @@ class BotController {
         }
 
         const events = new EventsController();
+        // console.log(this.EventsController)
         const result = await events.processMessage(message.text);
 
         slashCommand.replyPublic(message, result); // display a creation message

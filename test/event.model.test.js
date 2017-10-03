@@ -8,9 +8,9 @@ describe ('EventModel', function () {
   it('should insert an event into the database', async () => {
     sinon.spy(Event, 'create');
 
-    const event = await Event.createEvent('pita');
+    const event = await Event.createEvent('mippy');
     Event.create.called.should.be.true;
-    event.should.have.property('info').with.valueOf('pita');
+    event.should.have.property('info').with.valueOf('mippy');
     event.should.have.property('id');
     event.should.have.property('date');
     event.should.have.property('updatedAt');
@@ -22,7 +22,7 @@ describe ('EventModel', function () {
   it ('should delete an event from the database', async () => {
     sinon.spy(Event, 'destroy');
 
-    const destroyed = await Event.deleteEvent('pita');
+    const destroyed = await Event.deleteEvent('mippy');
     Event.destroy.called.should.be.true;
     destroyed.should.equal(1);
 

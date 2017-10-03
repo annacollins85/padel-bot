@@ -11,7 +11,8 @@ describe('BotController', function () {
     botController = new BotController();
   });
 
-  it ('should process the message from Slack', async () => {
-    
-  });
+  // it ('should process the message from Slack', async () => {
+  //   // sinon.spy(botController, '')
+  //   botController.answerSlashCommands()
+  // });
 });
