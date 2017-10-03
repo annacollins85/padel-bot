@@ -9,6 +9,7 @@ class EventsController {
     this.eventsSerializer = eventsSerializer;
   }
 
+  //functions for botKit
   async processMessage (eventInfo) {
     const event = this.eventsSerializer.parseEvent(eventInfo);
     switch (event.action) {
@@ -56,7 +57,7 @@ class EventsController {
 
   async deleteEvent (name) {
     return (await this.Event.deleteEvent(name) !== 0) ? `Event ${name} deleted` : 'Event not found';
-  }
+  }s
 
 }
 

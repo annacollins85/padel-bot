@@ -26,7 +26,7 @@ const Event = sequelize.define('event', {
 
 Event.getNextEvent = async () => {
   try {
-    return await EventModel.Event.findOne({ order: [ ['date', 'ASC']]});
+    return await Event.findOne({ order: [ ['date', 'ASC']]});
   } catch (error) {
     Console.error(error);
   }
@@ -52,6 +52,14 @@ Event.deleteEvent = async (info) => {
 Event.updateAttendees = async (info, attendees) => {
   try {
     return await Event.update({ attendees: attendees }, { where: { info: info,  } });
+  } catch (error) {
+    Console.error(error);
+  }
+};
+
+Event.getAllEvents = async () => {
+  try {
+    return await Event.findAll({});
   } catch (error) {
     Console.error(error);
   }

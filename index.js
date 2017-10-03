@@ -1,12 +1,28 @@
+const Koa = require('koa');
+const app = new Koa();
+const serve = require('koa-static');
+const bodyParser = require('koa-bodyparser');
+const router = require('./router');
+
 const Botkit = require('botkit');
 const Strings = require('./utils/strings');
-const Console = console;
-const BotController = require('./controllers/bot.controller');
 
+const BotController = require('./controllers/bot.controller');
+const EventsController = require('./controllers/events.controller');
 require('dotenv').config();
 
-const EventsController = require('./controllers/events.controller');
+// app.use(serve('../../client'));
+//
+// app.use(bodyParser());
+app
+  .use(router.routes())
+  .use(router.allowedMethods())
+  .listen(3000, () => {
+    console.log('Koa app listening on port 3000');
+  });
 
+
+/** CONNECTION TO SLACK **/
 if (
   !process.env.CLIENT_ID ||
   !process.env.CLIENT_SECRET ||
@@ -27,7 +43,7 @@ const controller = Botkit.slackbot(config).configureSlackApp({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   scopes: ['commands', 'channels:read'],
-  redirectUri: 'https://cwbcn.localtunnel.me/oauth'
+  redirectUri: 'https://cwbcn2.localtunnel.me/oauth'
 });
 
 controller.setupWebserver(process.env.PORT, function (err, webserver) {
@@ -46,52 +62,11 @@ controller.setupWebserver(process.env.PORT, function (err, webserver) {
   });
 });
 
-/** ANSWERS SLASH COMMANDS **/
-
 const botController = new BotController();
 
+/** ANSWERS SLASH COMMANDS **/
 controller.on('slash_command', botController.answerSlashCommands);
 
 
 /** ANSWERS BUTTON CLICKS **/
-controller.on('interactive_message_callback', function (bot, trigger) {
-
-  const msg = trigger.original_message.attachments;
-
-  switch (trigger.actions[0].name) {
-    case 'register':
-      // This will need to be refactored and go into the controller and serializer
-      if (msg.length < 2) {
-        // We need to store the participants in a column in the events table as a JSON object
-        msg.push({
-          'title': 'People attending (1)',
-          'text': ' <@' + trigger.user + '>'
-        });
-      } else if (msg[1].text.indexOf(trigger.user) === -1) {
-        msg[1].title = 'People attending (' + Number(msg[1].text.match(/@/g).length+1) + ')';
-        msg[1].text = msg[1].text + ' <@' + trigger.user + '>';
-      }
-      bot.replyInteractive(trigger, trigger.original_message);
-      // EventsController.updateAttendees(info, msg[1].text);// NEED TO PASS EVENT NAME
-      break;
-
-    case 'unregister':
-      if (msg.length < 2) {
-        return; //ignore
-      }
-      else if (msg[1].text.indexOf(trigger.user) !== -1) {
-        if (msg[1].text.match(/@/g).length === 1) {
-          msg.pop();
-        }
-        else {
-          const name = ' <@' + trigger.user + '>';
-          msg[1].title = 'People attending (' + Number(msg[1].text.match(/@/g).length-1) + ')';
-          msg[1].text = msg[1].text.replace(name, '');
-        }
-      }
-      bot.replyInteractive(trigger, trigger.original_message);
-      // EventsController.updateAttendees(info, msg[1].text);// NEED TO PASS EVENT NAME
-      break;
-
-  }
-});
+controller.on('interactive_message_callback', botController.interactiveMessageCallback);
