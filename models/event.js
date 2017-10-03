@@ -8,6 +8,13 @@ const Event = sequelize.define('event', {
   },
   date: {
     type: Sequelize.DATE
+  },
+  attendees: {
+    type: Sequelize.STRING
+  },
+  allDay: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
   }
 });
 // Event.sync({force: true});
@@ -21,7 +28,7 @@ const Event = sequelize.define('event', {
 //   }
 // };
 
-module.exports.getNextEvent = async () => {
+Event.getNextEvent = async () => {
   try {
     return await Event.findOne({ order: [ ['date', 'ASC']]});
   } catch (error) {
@@ -29,19 +36,36 @@ module.exports.getNextEvent = async () => {
   }
 };
 
-module.exports.createEvent = async (info) => {
-  const date = new Date();
+Event.createEvent = async (info, date, allDay) => {
   try {
-    return await Event.create({info: info, date});
+    return await Event.create({info, date, allDay});
   } catch (error) {
     Console.error(error);
   }
 };
 
-module.exports.deleteEvent = async (id) => {
+Event.deleteEvent = async (info) => {
   try {
-    return await Event.destroy({ where: { id: id } });
+    return await Event.destroy({ where: { info: info } });
   } catch (error) {
     Console.error(error);
   }
 };
+
+Event.updateAttendees = async (data) => {
+  try {
+    return await Event.update({ attendees: data[1].text }, { where: { info: data[0].text} });
+  } catch (error) {
+    Console.error(error);
+  }
+};
+
+Event.getAllEvents = () => {
+  try {
+    return Event.findAll({});
+  } catch (error) {
+    Console.error(error);
+  }
+};
+
+module.exports = Event;
