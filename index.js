@@ -11,18 +11,6 @@ const BotController = require('./controllers/bot.controller');
 const EventsController = require('./controllers/events.controller');
 require('dotenv').config();
 
-// app.use(serve('../../client'));
-//
-// app.use(bodyParser());
-app
-  .use(router.routes())
-  .use(router.allowedMethods())
-  .listen(3000, () => {
-    console.log('Koa app listening on port 3000');
-  });
-
-
-/** CONNECTION TO SLACK **/
 if (
   !process.env.CLIENT_ID ||
   !process.env.CLIENT_SECRET ||
@@ -66,6 +54,8 @@ const botController = new BotController();
 
 /** ANSWERS SLASH COMMANDS **/
 controller.on('slash_command', botController.answerSlashCommands);
+
+const eventsController = new EventsController();
 
 
 /** ANSWERS BUTTON CLICKS **/

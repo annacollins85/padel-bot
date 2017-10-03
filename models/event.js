@@ -49,9 +49,9 @@ Event.deleteEvent = async (info) => {
   }
 };
 
-Event.updateAttendees = async (info, attendees) => {
+Event.updateAttendees = async (data) => {
   try {
-    return await Event.update({ attendees: attendees }, { where: { info: info,  } });
+    return await Event.update({ attendees: data[1].text }, { where: { info: data[0].text} });
   } catch (error) {
     Console.error(error);
   }

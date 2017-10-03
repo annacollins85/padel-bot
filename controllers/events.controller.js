@@ -50,9 +50,8 @@ class EventsController {
     return this.eventsSerializer.formatNewEvent(nextEvent.dataValues);
   }
 
-  async updateAttendees (name) {
-    const event = await this.Event.updateAttendees();
-    return;
+  async updateAttendees (data) {
+    return await this.Event.updateAttendees(data);
   }
 
   async deleteEvent (name) {

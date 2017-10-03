@@ -36,8 +36,8 @@ class BotController {
   }
 
   async interactiveMessageCallback (bot, trigger) {
-
     const msg = trigger.original_message.attachments;
+    const eventName = msg.text;
 
     switch (trigger.actions[0].name) {
       case 'register':
@@ -53,7 +53,7 @@ class BotController {
           msg[1].text = msg[1].text + ' <@' + trigger.user + '>';
         }
         bot.replyInteractive(trigger, trigger.original_message);
-        // EventsController.updateAttendees(info, msg[1].text);// NEED TO PASS EVENT NAME
+        eventsController.updateAttendees(msg);
         break;
 
       case 'unregister':
@@ -71,8 +71,9 @@ class BotController {
           }
         }
         bot.replyInteractive(trigger, trigger.original_message);
-        // EventsController.updateAttendees(info, msg[1].text);// NEED TO PASS EVENT NAME
+        eventsController.updateAttendees(msg);
         break;
+
     }
   }
 
