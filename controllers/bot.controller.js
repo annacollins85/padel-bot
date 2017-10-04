@@ -4,6 +4,8 @@ const EventsController = require('./events.controller');
 class BotController {
   constructor () {
     this.eventsController = new EventsController();
+
+    this.interactiveMessageCallback = this.interactiveMessageCallback.bind(this);
   }
 
   async answerSlashCommands (slashCommand, message) {
@@ -17,8 +19,11 @@ class BotController {
           slashCommand.replyPrivate(message, Strings.HELP);
           return;
         }
-
-        const result = await this.eventsController.processMessage(message.text);
+        // doesn't work because the constructor never instantiates a new EventsController
+        // console.log(this.eventsController)
+        // const result = await this.eventsController.processMessage(message.text);
+        const events = new EventsController();
+        const result = await events.processMessage(message.text);
 
         slashCommand.replyPublic(message, result); // display a creation message
 
@@ -36,6 +41,8 @@ class BotController {
     const msg = trigger.original_message.attachments;
     const eventName = msg.text;
 
+    //need to instantiate EventsController because if not, this.eventsController from constructor is undefined.
+
     switch (trigger.actions[0].name) {
       case 'register':
         // This will need to be refactored and go into the controller and serializer
@@ -50,7 +57,8 @@ class BotController {
           msg[1].text = msg[1].text + ' <@' + trigger.user + '>';
         }
         bot.replyInteractive(trigger, trigger.original_message);
-        eventsController.updateAttendees(msg);
+        console.log(this);
+        this.eventsController.updateAttendees(msg);
         break;
 
       case 'unregister':
@@ -68,7 +76,7 @@ class BotController {
           }
         }
         bot.replyInteractive(trigger, trigger.original_message);
-        eventsController.updateAttendees(msg);
+        this.eventsController.updateAttendees(msg);
         break;
 
     }

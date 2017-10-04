@@ -2,6 +2,8 @@
 
 const Strings = require('../utils/strings');
 
+const moment = require('moment');
+
 module.exports.parseEvent = (eventInfo) => {
   const [action, ...params] = eventInfo.split(' ');
   return { action: action, params: params.join(' ') };
@@ -28,12 +30,17 @@ module.exports.parseEvent = (eventInfo) => {
 // };
 
 module.exports.formatNewEvent = (event) => {
+  const timeFormat = event.allDay ? '' : ', h:mm a';
+  const calendarTime = event.date
+    ? ' – ' + moment(event.date).format(`MMM Do${timeFormat}`)
+    : '';
 
+  const eventInfo = event.info + calendarTime;
   let response = {
     'response_type': 'in_channel',
     'text': 'A new event has just been created! Fancy joining?',
     'attachments': [{
-      'text': event.info,
+      'text': eventInfo,
       'attachment_type': 'default',
       'actions': [
         {

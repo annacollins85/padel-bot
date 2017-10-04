@@ -54,7 +54,10 @@ Event.deleteEvent = async (info) => {
 
 Event.updateAttendees = async (data) => {
   try {
-    return await Event.update({ attendees: data[1].text }, { where: { info: data[0].text} });
+    const attendees = data[1]
+      ? data[1].text
+      : '';
+    return await Event.update({ attendees }, { where: { id: data[0].id } });
   } catch (error) {
     Console.error(error);
   }
