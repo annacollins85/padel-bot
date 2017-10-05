@@ -1,6 +1,6 @@
+/* eslint-disable no-alert, no-console */
 const Sequelize = require('sequelize');
 const sequelize = require('../utils/db');
-const Console = console;
 
 const Event = sequelize.define('event', {
   info: {
@@ -24,7 +24,7 @@ const Event = sequelize.define('event', {
 //   try {
 //     return await Event.findAll();
 //   } catch (error) {
-//     Console.error(error);
+//     console.error(error);
 //   }
 // };
 
@@ -32,7 +32,7 @@ Event.getNextEvent = async () => {
   try {
     return await Event.findOne({ order: [ ['date', 'ASC']]});
   } catch (error) {
-    Console.error(error);
+    console.error(error);
   }
 };
 
@@ -40,7 +40,7 @@ Event.createEvent = async (info, date, allDay) => {
   try {
     return await Event.create({info, date, allDay});
   } catch (error) {
-    Console.error(error);
+    console.error(error);
   }
 };
 
@@ -48,7 +48,7 @@ Event.deleteEvent = async (info) => {
   try {
     return await Event.destroy({ where: { info: info } });
   } catch (error) {
-    Console.error(error);
+    console.error(error);
   }
 };
 
@@ -57,9 +57,9 @@ Event.updateAttendees = async (data) => {
     const attendees = data[1]
       ? data[1].text
       : '';
-    return await Event.update({ attendees }, { where: { id: data[0].id } });
+    return await Event.update({ attendees }, { where: { info: data[0].text } });
   } catch (error) {
-    Console.error(error);
+    console.error(error);
   }
 };
 
@@ -67,7 +67,7 @@ Event.getAllEvents = () => {
   try {
     return Event.findAll({});
   } catch (error) {
-    Console.error(error);
+    console.error(error);
   }
 };
 

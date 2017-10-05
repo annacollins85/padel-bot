@@ -1,3 +1,4 @@
+/* eslint-disable no-alert, no-console */
 const Botkit = require('botkit');
 const EventsController = require('./events.controller');
 
@@ -10,7 +11,7 @@ class BotController {
 
   async answerSlashCommands (slashCommand, message) {
     switch (message.command) {
-      case '/' + process.env.BOT_NAME: //handle the `/echo` slash command. We might have others assigned to this app too!
+      case '/' + process.env.BOT_NAME: //handle the `/event` slash command. We might have others assigned to this app too!
       // but first, let's make sure the token matches!
         if (message.token !== process.env.VERIFICATION_TOKEN) return; //just ignore it.
 
@@ -19,9 +20,6 @@ class BotController {
           slashCommand.replyPrivate(message, Strings.HELP);
           return;
         }
-        // doesn't work because the constructor never instantiates a new EventsController
-        // console.log(this.eventsController)
-        // const result = await this.eventsController.processMessage(message.text);
         const events = new EventsController();
         const result = await events.processMessage(message.text);
 
@@ -57,7 +55,6 @@ class BotController {
           msg[1].text = msg[1].text + ' <@' + trigger.user + '>';
         }
         bot.replyInteractive(trigger, trigger.original_message);
-        console.log(this);
         this.eventsController.updateAttendees(msg);
         break;
 

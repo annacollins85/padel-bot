@@ -30,12 +30,7 @@ module.exports.parseEvent = (eventInfo) => {
 // };
 
 module.exports.formatNewEvent = (event) => {
-  const timeFormat = event.allDay ? '' : ', h:mm a';
-  const calendarTime = event.date
-    ? ' – ' + moment(event.date).format(`MMM Do${timeFormat}`)
-    : '';
-
-  const eventInfo = event.info + calendarTime;
+  const eventInfo = event.info;
   let response = {
     'response_type': 'in_channel',
     'text': 'A new event has just been created! Fancy joining?',
