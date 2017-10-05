@@ -50,9 +50,9 @@ module.exports.mockMessage = {
   type: 'slash_command'
 };
 
-module.exports.slashCommand = {
-  //
-}
+// module.exports.slashCommand = {
+//
+// }
 
 module.exports.dateTime = '04/10/2017 14:00';
 module.exports.mockMessageWithDateTime = 'create bbq ' + module.exports.dateTime;

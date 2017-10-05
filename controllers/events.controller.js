@@ -47,9 +47,13 @@ class EventsController {
       allDay = matches[2] === undefined;
       date = moment(date, 'DD/MM/YYYY HH:mm').toDate();
     }
-    //problem here. The date is being formatted incorrectly here. 2 hours before in database. Correct on slack
+    const timeFormat = allDay ? '' : ', h:mm a';
+    const calendarTime = date
+      ? ' – ' + moment(date).format(`MMM Do${timeFormat}`)
+      : '';
+    const eventInfo = name + calendarTime;
 
-    const event = await this.Event.createEvent(name, date, allDay);
+    const event = await this.Event.createEvent(eventInfo, date, allDay);
     return await this.eventsSerializer.formatNewEvent(event.dataValues);
   }
 

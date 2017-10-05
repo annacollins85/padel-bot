@@ -1,3 +1,4 @@
+/* eslint-disable no-alert, no-console */
 const Koa = require('koa');
 const app = new Koa();
 const bodyParser = require('koa-bodyparser');
@@ -30,7 +31,7 @@ if (
   !process.env.PORT ||
   !process.env.VERIFICATION_TOKEN
 ) {
-  Console.log(
+  console.log(
     'Error: Specify CLIENT_ID, CLIENT_SECRET, VERIFICATION_TOKEN and PORT in environment'
   );
   process.exit(1);
