@@ -18,17 +18,23 @@ Run `npm install` to install the dependencies
 
 Download localtunnel `npm install -g localtunnel` and execute it like this `lt --port 8765 --subdomain cwbcn `. Be aware that it can be unreliable, needing to be restarted frequently.
 
-In the [Slack slash command settings](https://api.slack.com/apps/A6EMKTEAJ/slash-commands) create a /padel command if it doesn't exist yet
+Go to the slack api page (https://api.slack.com/apps) and create a new app.
 
-Go to the [Slack admin panel's App  Credentials](https://api.slack.com/apps/A6EMKTEAJ/general) and use the information to start the application like this : `CLIENT_ID=<client id> CLIENT_SECRET=<client secret> VERIFICATION_TOKEN=<verification token> PORT=8765 npm run dev` 
+In the [Slack slash command settings](https://api.slack.com/apps/A6EMKTEAJ/slash-commands), in the Command, create your command (e.g. /botname), in Request URL use https://cwbcn.localtunnel.me/slack/receive. Under OAuth and Permissions, be sure to add the redirect URL, which will be https://cwbcn.localtunnel.me/oauth.
+
+In your app, add a .env file with: CLIENT_ID=<your api client id>, CLIENT_SECRET<your api client secret>, PORT=8675, VERIFICATION_TOKEN=<your verification token> and BOT_NAME=<your bot name>
+
+Go to the [Slack admin panel's App  Credentials](https://api.slack.com/apps/A6EMKTEAJ/general) and use the information to start the application like this : `CLIENT_ID=<client id> CLIENT_SECRET=<client secret> VERIFICATION_TOKEN=<verification token> PORT=8765 npm run dev`
 
 Authenticate the application with Oauth by going to (http://localhost:8765/login)
 
 ## Use
 
-Type ```/padel create 13:00 tomorrow``` to create a new event
+Type ```/botname create 13:00 tomorrow``` to create a new event
 
-Type ```/padel next``` to see the next event
+Type ```/botname next``` to see the next event
+
+If more than one person is working on the project, each team member has to create a separate slack app and run localtunnel under a different subdomanin. E.g.cwbcn2.
 
 ## Contributing
 

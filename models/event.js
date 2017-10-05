@@ -60,9 +60,20 @@ Event.updateAttendees = async (data) => {
   }
 };
 
+
+//Functions for Koa server to add dummy data to the db without using slack and localtunnel
+//Used for developing the front end
 Event.getAllEvents = () => {
   try {
     return Event.findAll({});
+  } catch (error) {
+    Console.error(error);
+  }
+};
+
+Event.postEvent = async (info, date, attendees, allDay) => {
+  try {
+    return await Event.create({info, date, attendees, allDay});
   } catch (error) {
     Console.error(error);
   }

@@ -14,6 +14,7 @@ require('dotenv').config();
 
 app
   .use(cors())
+  .use(bodyParser())
   .use(logger())
   .use(router.routes())
   .use(router.allowedMethods())
