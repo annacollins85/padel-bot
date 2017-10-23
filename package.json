@@ -1,12 +1,12 @@
 {
-  "name": "padel-slack-bot",
+  "name": "bananas-events-slack-bot",
   "version": "0.0.1",
-  "description": "Slack bot to organize padel games",
+  "description": "Slack bot to organize informal events",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "mocha"
+    "test": "ENV=test mocha"
   },
   "author": "JMP - Codeworks",
   "license": "ISC",
@@ -19,6 +19,12 @@
     "gulp-eslint": "^4.0.0",
     "gulp-load-plugins": "^1.5.0",
     "isomorphic-fetch": "^2.2.1",
+    "kcors": "^2.2.1",
+    "koa": "^2.3.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-logger": "^3.1.0",
+    "koa-router": "^7.2.1",
+    "moment": "^2.18.1",
     "pg": "^7.0.2",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.4.2",
@@ -31,7 +37,9 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-json": "^1.2.0",
     "ghooks": "^2.0.0",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "nodemon": "^1.12.1",
+    "sinon": "^4.0.0"
   },
   "engines": {
     "node": ">=8.0.0"

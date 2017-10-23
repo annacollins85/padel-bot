@@ -8,10 +8,10 @@ const eventsSerializer = require('../serializers/events.serializer');
 describe('Parse events', () => {
 
   it('should parse the correct action', () => {
-    eventsSerializer.parseEvent(mocks.create).action.should.equal('create');
-    eventsSerializer.parseEvent(mocks.list).action.should.equal('list');
-    eventsSerializer.parseEvent(mocks.delete).action.should.equal('delete');
-    eventsSerializer.parseEvent(mocks.non_valid).action.should.equal('non');
+    eventsSerializer.parseEvent(mocks.mockSerializer.create).action.should.equal('create');
+    eventsSerializer.parseEvent(mocks.mockSerializer.list).action.should.equal('list');
+    eventsSerializer.parseEvent(mocks.mockSerializer.delete).action.should.equal('delete');
+    eventsSerializer.parseEvent(mocks.mockSerializer.non_valid).action.should.equal('non');
   });
 
 });

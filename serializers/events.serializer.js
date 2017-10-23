@@ -2,9 +2,11 @@
 
 const Strings = require('../utils/strings');
 
+const moment = require('moment');
+
 module.exports.parseEvent = (eventInfo) => {
   const [action, ...params] = eventInfo.split(' ');
-  return { action: action, params: params };
+  return { action: action, params: params.join(' ') };
 };
 
 /* The list feature is WIP */
@@ -28,17 +30,23 @@ module.exports.parseEvent = (eventInfo) => {
 // };
 
 module.exports.formatNewEvent = (event) => {
-
+  const eventInfo = event.info;
   let response = {
     'response_type': 'in_channel',
-    'text': 'A new event has just been created! Will you attend?',
+    'text': 'A new event has just been created! Fancy joining?',
     'attachments': [{
-      'text': event.info,
+      'text': eventInfo,
       'attachment_type': 'default',
       'actions': [
         {
           'name': 'register',
-          'text': 'I\'m interested!',
+          'text': 'Count me in!',
+          'type': 'button',
+          'value': event.id
+        },
+        {
+          'name': 'unregister',
+          'text': 'Sorry! I can\'t make it anymore.',
           'type': 'button',
           'value': event.id
         }

@@ -2,10 +2,18 @@ const eventsSerializer = require('../serializers/events.serializer');
 const Event = require('../models/event');
 const Strings = require('../utils/strings');
 
+const moment = require('moment');
+
 class EventsController {
 
+  constructor () {
+    this.Event = Event;
+    this.eventsSerializer = eventsSerializer;
+  }
+
+  //functions for botKit
   async processMessage (eventInfo) {
-    const event = eventsSerializer.parseEvent(eventInfo);
+    const event = this.eventsSerializer.parseEvent(eventInfo);
     switch (event.action) {
       case 'create':
         return await this.createEvent(event.params);
@@ -20,30 +28,52 @@ class EventsController {
     }
   }
 
-  async createEvent (info) {
-    if (info === '' || !info || info === false) {
-      console.log('no info provided');
+  async createEvent (name) {
+    if (
+      typeof name !== 'string'
+      || name === ''
+      || !name
+      || name === false
+    ) {
       return false;
     }
-    console.log('info is', info);
-    const event = await Event.createEvent(info.join(' '));
-    console.log('event is', JSON.stringify(event));
-    return await eventsSerializer.formatNewEvent(event.dataValues);
+
+    const matches = name.match(/(\d\d\/\d\d\/\d\d\d\d)[\s]?(\d\d:\d\d)?/);
+    let date;
+    let allDay = true;
+    if (matches && matches.length > 0) {
+      date = matches[0];
+      name = name.substring(0, matches.index).trim();
+      allDay = matches[2] === undefined;
+      date = moment(date, 'DD/MM/YYYY HH:mm').toDate();
+    }
+    const timeFormat = allDay ? '' : ', h:mm a';
+    const calendarTime = date
+      ? ' – ' + moment(date).format(`MMM Do${timeFormat}`)
+      : '';
+    const eventInfo = name + calendarTime;
+
+    const event = await this.Event.createEvent(eventInfo, date, allDay);
+    return await this.eventsSerializer.formatNewEvent(event.dataValues);
   }
 
   /* The list feature is WIP */
   // async listEvents () {
-  //   const eventList = await Event.getEvents();
-  //   return eventsSerializer.formatEventList(eventList);
+  //   const eventList = await this.Event.getEvents();
+  //   return this.eventsSerializer.formatEventList(eventList);
   // }
 
   async getNextEvent () {
-    const nextEvent = await Event.getNextEvent();
-    return eventsSerializer.formatNewEvent(nextEvent.dataValues);
+    const nextEvent = await this.Event.getNextEvent();
+    return this.eventsSerializer.formatNewEvent(nextEvent.dataValues);
   }
 
-  async deleteEvent (id) {
-    return (await Event.deleteEvent(id) !== 0) ? `Event ${id} deleted` : 'Event not found';
+  async updateAttendees (data) {
+    return await this.Event.updateAttendees(data);
+  }
+
+  async deleteEvent (name) {
+    return (await this.Event.deleteEvent(name) !== 0) ? `Event ${name} deleted` : 'Event not found';
   }
 
 }
